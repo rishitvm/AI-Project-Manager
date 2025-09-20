@@ -1,0 +1,43 @@
+John (PM): Hey everyone, glad you could join. Since this is our first meeting, let’s start with quick intros.  
+Sarah: Hi all, I’m Sarah. I usually work on frontend, mostly React and design.  
+Rajesh: Hello, I’m Rajesh. I handle backend development — Node, APIs, all that stuff.  
+Priya: Hi team, I’m Priya. I take care of databases and deployments.  
+John (PM): Great, thanks! I’m John, I’ll be coordinating the project as PM.  
+
+John (PM): So, our project is a small full-stack website. Nothing too fancy, but it should cover the basics — a landing page, user signup/login, and a simple dashboard. Let’s try to wrap this in about three weeks.  
+
+Sarah: Sounds good. Will we be using React for frontend?  
+John (PM): Yep, React for the UI. Priya suggested PostgreSQL earlier, so let’s stick with that for database. Rajesh, you can set up Node + Express backend.  
+
+Rajesh: Works for me. Do we also need authentication right away?  
+John (PM): Yes, keep it simple, maybe JWT. We just need a working login for now.  
+
+Sarah: Okay, I’ll start with the landing page design and basic components.  
+John (PM): Perfect. Can you finish the landing page by Thursday?  
+Sarah: Yep, Thursday works.  
+
+Priya: I’ll handle database setup. Should I also create schema for user accounts?  
+John (PM): Exactly. Can you get the schema ready and database running by Friday?  
+Priya: Sure thing.  
+
+Rajesh: I’ll get the server running and connect it to Priya’s DB once she’s done.  
+John (PM): Good. But before that, Rajesh, can you at least get the Node server skeleton ready by Thursday?  
+Rajesh: Yeah, no problem.  
+
+Sarah: Who’s handling deployment?  
+John (PM): Priya can set up a basic deployment pipeline on Heroku or Vercel after the database work. Not urgent yet, maybe next week.  
+
+Rajesh: Cool. Do we need a GitHub repo?  
+John (PM): Yes, I’ll create it tonight and share access. Everyone pushes to `dev` branch.  
+
+John (PM): Quick recap before we close:  
+- Sarah → Landing page design by Thursday.  
+- Rajesh → Node.js server skeleton by Thursday.  
+- Priya → Database schema + setup by Friday.  
+- John (PM) → Create GitHub repo and share today.  
+
+Sarah: Sounds good to me.  
+Rajesh: Yep, clear.  
+Priya: All set.  
+
+John (PM): Awesome. Thanks everyone. Let’s regroup on Friday and see where we stand.  
