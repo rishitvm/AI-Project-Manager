@@ -139,3 +139,42 @@ if st.button("Delete Task from Jira"):
             st.error("Failed to delete task from Jira.")
     else:
         st.warning("Please enter a Task ID.")
+
+'''st.subheader("Fetch & Edit Task from Jira")
+fetch_task_id = st.text_input("Enter Task ID to fetch", key="fetch_task_id")
+
+if st.button("Fetch Task"):
+    if fetch_task_id.strip():
+        resp = requests.get(f"{BACKEND_URL}/get-task/{fetch_task_id}")
+        if resp.status_code == 200:
+            data = resp.json()
+            if data["status"] == "success":
+                st.session_state.fetched_df = pd.DataFrame([data["task"]])
+                st.success(f"Task {fetch_task_id} fetched from Jira!")
+            else:
+                st.warning(data["message"])
+        else:
+            st.error("Failed to fetch task from Jira.")
+    else:
+        st.warning("Please enter a Task ID.")
+
+if "fetched_df" in st.session_state:
+    st.subheader("Edit Fetched Task Details")
+
+    st.session_state.fetched_df = st.data_editor(
+        st.session_state.fetched_df,
+        use_container_width=True,
+        key="fetched_task_editor"
+    )
+
+    if st.button("Update Jira with Edited Task"):
+        tasks_list = st.session_state.fetched_df.to_dict(orient="records")
+        resp = requests.post(f"{BACKEND_URL}/save-tasks", json=tasks_list)
+        if resp.status_code == 200:
+            data = resp.json()
+            st.success(data["message"])
+            with st.expander("Jira update log (Edited Task)"):
+                for r in data["jira_results"]:
+                    st.write(r)
+        else:
+            st.error("Failed to update Jira.")'''
