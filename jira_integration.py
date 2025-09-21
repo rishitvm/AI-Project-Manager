@@ -81,6 +81,23 @@ def update_jira_from_csv(filename):
 
     return results
 
+def delete_task_from_jira(task_id):
+    jira = JIRA(
+        server=JIRA_URL,
+        basic_auth=(JIRA_EMAIL, JIRA_API_TOKEN)
+    )
+
+    jql = f'project = {JIRA_PROJECT_KEY} AND labels = "taskid_{task_id}"'
+    issues = jira.search_issues(jql)
+
+    if not issues:
+        return f"⚠️ No Jira issue found for Task ID {task_id}"
+
+    issue = issues[0]
+    key = issue.key
+    issue.delete()
+    return f"🗑️ Deleted {key} (Task ID {task_id})"
+
 '''x = update_jira_from_csv("approval.csv")
 for y in x:
     print(y)'''
