@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from typing import List
 from transcript_analyzer import extract_data, save_to_csv
 from jira_integration import update_jira_from_csv, delete_task_from_jira
-
 app = FastAPI(title="AI Project Manager")
 
 class Transcript(BaseModel):
@@ -16,7 +15,7 @@ class Task(BaseModel):
     deadline: str = ""
     deliverable: str = ""
     priority: str = "Medium"
-    status: str = "To Do"
+    status: str = "In Progress"
 
 @app.post("/extract-tasks")
 def api_extract_tasks(data: Transcript):
@@ -38,3 +37,11 @@ def api_save_tasks(tasks: List[dict]):
 def api_delete_task(task_id: int):
     result = delete_task_from_jira(task_id)
     return {"status": "success", "message": result}
+
+'''@app.get("/get-task/{task_id}")
+def api_get_task(task_id: int):
+    task = fetch_task_from_jira(task_id)
+    if task:
+        return {"status": "success", "task": task}
+    else:
+        return {"status": "error", "message": f"No task found with ID {task_id}"}'''
