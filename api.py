@@ -2,7 +2,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import List
 from transcript_analyzer import extract_data, save_to_csv
-from jira_integration import update_jira_from_csv
+from jira_integration import update_jira_from_csv, delete_task_from_jira
 
 app = FastAPI(title="AI Project Manager")
 
@@ -33,3 +33,8 @@ def api_save_tasks(tasks: List[dict]):
         "message": "CSV saved & Jira updated!",
         "jira_results": jira_results
     }
+
+@app.delete("/delete-task/{task_id}")
+def api_delete_task(task_id: int):
+    result = delete_task_from_jira(task_id)
+    return {"status": "success", "message": result}
