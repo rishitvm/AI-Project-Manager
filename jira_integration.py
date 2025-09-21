@@ -97,6 +97,39 @@ def delete_task_from_jira(task_id):
     key = issue.key
     issue.delete()
     return f"🗑️ Deleted {key} (Task ID {task_id})"
+    
+'''def fetch_task_from_jira(task_id):
+    jira = JIRA(
+        server=JIRA_URL,
+        basic_auth=(JIRA_EMAIL, JIRA_API_TOKEN)
+    )
+
+    jql = f'project = {JIRA_PROJECT_KEY} AND labels = "taskid_{task_id}"'
+    issues = jira.search_issues(jql)
+
+    if not issues:
+        return None
+
+    issue = issues[0]
+    desc_lines = issue.fields.description.splitlines() if issue.fields.description else []
+    desc_dict = {}
+    for line in desc_lines:
+        if ":" in line:
+            key, value = line.split(":", 1)
+            desc_dict[key.strip().lower()] = value.strip()
+
+    task = {
+        "id": task_id,
+        "giver": desc_dict.get("giver", ""),
+        "assignee": desc_dict.get("assignee", issue.fields.assignee.displayName if issue.fields.assignee else ""),
+        "task": desc_dict.get("task", issue.fields.summary.replace(f"[{task_id}] ", "")),
+        "deadline": desc_dict.get("deadline", ""),
+        "deliverable": desc_dict.get("deliverable", ""),
+        "priority": desc_dict.get("priority", issue.fields.priority.name if issue.fields.priority else "Medium"),
+        "status": desc_dict.get("status", issue.fields.status.name)
+    }
+    return task'''
+
 
 '''x = update_jira_from_csv("approval.csv")
 for y in x:
