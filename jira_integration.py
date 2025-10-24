@@ -98,7 +98,7 @@ def delete_task_from_jira(task_id):
     issue.delete()
     return f"🗑️ Deleted {key} (Task ID {task_id})"
     
-'''def fetch_task_from_jira(task_id):
+def fetch_task_from_jira(task_id):
     jira = JIRA(
         server=JIRA_URL,
         basic_auth=(JIRA_EMAIL, JIRA_API_TOKEN)
@@ -128,7 +128,7 @@ def delete_task_from_jira(task_id):
         "priority": desc_dict.get("priority", issue.fields.priority.name if issue.fields.priority else "Medium"),
         "status": desc_dict.get("status", issue.fields.status.name)
     }
-    return task'''
+    return task
 
 
 '''x = update_jira_from_csv("approval.csv")
