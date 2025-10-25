@@ -2,6 +2,7 @@ from fastapi import FastAPI, Request
 from pydantic import BaseModel
 from typing import List
 from datetime import datetime
+from multi_agent_wrapper import build_multi_agent_graph
 from transcript_analyzer import (
     extract_metadata_from_transcript,
     extract_tasks_from_transcript,
@@ -13,6 +14,7 @@ from jira_integration import (
     fetch_task_from_jira
 )
 from memory_manager import load_memory, save_memory
+from chatbot import query_llm
 
 app = FastAPI(title="AI Project Manager")
 
@@ -33,6 +35,9 @@ class ProjectInfoUpdate(BaseModel):
 
 class NotesUpdate(BaseModel):
     notes: List[str]
+
+class QuestionRequest(BaseModel):
+    question: str
 
 @app.post("/extract-tasks")
 async def api_extract_tasks(request: Request):
@@ -217,3 +222,17 @@ def get_project_details():
 def get_task_analysis():
     memory = load_memory()
     return {"tasks": memory["tasks"], "metadata": memory["metadata"]}
+
+@app.post("/ask-question")
+async def ask_question(req: QuestionRequest):
+    memory = load_memory()
+    response = query_llm(memory, req.question)
+    return {"answer": response}
+
+"""@app.post("/run-multi-agent")
+async def run_multi_agent(request: Request):
+    data = await request.json()
+    transcript = data.get("transcript")
+    graph = build_multi_agent_graph()
+    result = graph.invoke({"transcript": transcript})
+    return result"""
