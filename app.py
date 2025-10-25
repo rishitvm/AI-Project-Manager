@@ -39,9 +39,9 @@ if page == "Project Details":
     # Display project name
     col1, col2 = st.columns([0.8, 0.2])
     with col1:
-        st.markdown(f"<h1 style='text-align: left; color: #1E88E5;'>🚀 {st.session_state.project_name}</h1>", unsafe_allow_html=True)
+        st.markdown(f"<h1 style='text-align: left; color: #1E88E5;'>{st.session_state.project_name}</h1>", unsafe_allow_html=True)
     with col2:
-        if st.button("✏️ Edit Name", key="edit_project_name_btn"):
+        if st.button("✏️", key="edit_project_name_btn"):
             st.session_state.edit_project_name = True
 
     # Editable project name
@@ -269,6 +269,9 @@ if page == "Project Details":
 elif page == "AutoPM":
 
     st.title("AI Project Manager (AutoPM)")
+    st.write("")
+    st.write("")
+
 
     # ---------------- Transcript Upload & Extraction ---------------- #
     uploaded_file = st.file_uploader("Upload Meeting Transcript (.txt)", type=["txt"])
@@ -343,7 +346,7 @@ elif page == "AutoPM":
                     st.error("Failed to save & update Jira.")
 
     # ---------------- Manual Task Creation ---------------- #
-    st.subheader("Create Manual Tasks (No Transcript Needed)")
+    st.subheader("Create Manual Tasks")
 
     if "df_manual" not in st.session_state:
         st.session_state.df_manual = pd.DataFrame(columns=[
@@ -455,3 +458,79 @@ elif page == "AutoPM":
                         st.write(r)
             else:
                 st.error("Failed to update Jira.")
+
+
+
+# Chatbot Interaction
+if 'show_chatbot' not in st.session_state:
+    st.session_state.show_chatbot = False
+if 'chat_history' not in st.session_state:
+    st.session_state.chat_history = []
+if 'input_key' not in st.session_state:
+    st.session_state.input_key = 0
+
+if st.sidebar.button("💬 Ask AI", key="ask_ai_btn"):
+    st.session_state.show_chatbot = not st.session_state.show_chatbot
+
+if st.session_state.show_chatbot:
+    @st.dialog("🤖 AI Assistant", width="large")
+    def show_chatbot():
+        if st.button("🗑️ Clear Chat", key="clear_chat_btn"):
+            st.session_state.chat_history = []
+            st.rerun()
+
+        chat_container = st.container(height = 250)
+        with chat_container:
+            if len(st.session_state.chat_history) == 0:
+                st.info("👋 Hello! How can I help you today?")
+            else:
+                for msg in st.session_state.chat_history:
+                    if msg['role'] == 'user':
+                        col1, col2 = st.columns([0.3, 0.7])
+                        with col2:
+                            with st.chat_message("user"):
+                                st.write(msg['content'])
+                    else:
+                        with st.chat_message("assistant"):
+                            st.write(msg['content'])
+
+        st.markdown("---")
+        col_input, col_send = st.columns([0.85, 0.15])
+
+        with col_input:
+            user_input = st.text_area(
+                "Type a message...",
+                value="",
+                height=70,
+                placeholder="Ask me anything...",
+                key=f"chat_input_field_{st.session_state.input_key}",
+                label_visibility="collapsed"
+            )
+
+        with col_send:
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("Send", key="send_btn", use_container_width=True, type="primary"):
+                if user_input.strip():
+                    st.session_state.chat_history.append({
+                        'role': 'user',
+                        'content': user_input
+                    })
+
+                    try:
+                        resp = requests.post(f"{BACKEND_URL}/ask-question", json={"question": user_input})
+                        if resp.status_code == 200:
+                            bot_response = resp.json().get("answer", "No response from AI.")
+                        else:
+                            bot_response = f"Error: {resp.status_code}"
+                    except Exception as e:
+                        bot_response = f"Error connecting to API: {e}"
+
+                    st.session_state.chat_history.append({
+                        'role': 'assistant',
+                        'content': bot_response
+                    })
+
+                    st.session_state.input_key += 1
+                    st.rerun()
+            
+    show_chatbot()
